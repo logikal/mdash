@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import HomePage from "./pages/HomePage";
+import DocsPage from "./pages/DocsPage";
 import DocumentPage from "./pages/DocumentPage";
 
 export default function App() {
@@ -13,10 +14,17 @@ export default function App() {
           >
             Multiplayer Markdown
           </Link>
+          <Link
+            to="/docs"
+            className="text-xs font-mono text-gray-500 hover:text-gray-300 transition-colors"
+          >
+            Browse docs
+          </Link>
         </header>
         <main className="flex-1 min-h-0 flex flex-col">
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/docs" element={<DocsPage />} />
             <Route path="/:docId" element={<DocumentPage />} />
           </Routes>
         </main>

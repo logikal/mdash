@@ -195,6 +195,71 @@ describe("Smoke tests — API", () => {
       expect(res.status).toBe(404);
     });
   });
+
+  describe("document list page support", () => {
+    it("GET /api/docs returns all fields needed by document list page", async () => {
+      // Create a document with a title heading
+      const createRes = await fetch(`${BASE_URL}/new`, {
+        method: "POST",
+        body: "# My Test Document\n\nSome content here.",
+        redirect: "manual",
+      });
+      const slug = createRes.headers.get("location")!.replace(/^\//, "");
+
+      const res = await fetch(`${BASE_URL}/api/docs`);
+      expect(res.status).toBe(200);
+      const body = (await res.json()) as {
+        docs: Array<{
+          slug: string;
+          title: string;
+          owner: string;
+          created: string;
+          lastModified: string;
+        }>;
+      };
+
+      const found = body.docs.find((d) => d.slug === slug);
+      expect(found).toBeTruthy();
+      // Title should be extracted from the # heading
+      expect(found!.title).toBe("My Test Document");
+      expect(found!.owner).toBe("anonymous");
+      expect(found!.created).toBeTruthy();
+      expect(found!.lastModified).toBeTruthy();
+      // Dates should be valid ISO strings
+      expect(new Date(found!.created).getTime()).toBeGreaterThan(0);
+      expect(new Date(found!.lastModified).getTime()).toBeGreaterThan(0);
+    });
+
+    it("GET /api/docs returns 'Untitled' for documents without headings", async () => {
+      const createRes = await fetch(`${BASE_URL}/new`, {
+        method: "POST",
+        body: "Just some text without a heading",
+        redirect: "manual",
+      });
+      const slug = createRes.headers.get("location")!.replace(/^\//, "");
+
+      const res = await fetch(`${BASE_URL}/api/docs`);
+      const body = (await res.json()) as {
+        docs: Array<{ slug: string; title: string }>;
+      };
+      const found = body.docs.find((d) => d.slug === slug);
+      expect(found).toBeTruthy();
+      expect(found!.title).toBe("Untitled");
+    });
+
+    it("GET /api/docs returns documents sorted by lastModified descending", async () => {
+      const res = await fetch(`${BASE_URL}/api/docs`);
+      const body = (await res.json()) as {
+        docs: Array<{ lastModified: string }>;
+      };
+      // Verify sort order
+      for (let i = 1; i < body.docs.length; i++) {
+        const prev = new Date(body.docs[i - 1].lastModified).getTime();
+        const curr = new Date(body.docs[i].lastModified).getTime();
+        expect(prev).toBeGreaterThanOrEqual(curr);
+      }
+    });
+  });
 });
 
 describe("Smoke tests — WebSocket / Yjs sync", () => {

@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useCallback, useRef, useState } from "react";
 
 export default function HomePage() {
@@ -97,14 +97,22 @@ export default function HomePage() {
         </p>
       </div>
 
-      {/* New document button */}
-      <button
-        onClick={handleNewDocument}
-        disabled={creating}
-        className="px-8 py-3 bg-gray-800 hover:bg-gray-700 disabled:bg-gray-900 disabled:cursor-wait text-gray-200 border border-gray-700 hover:border-gray-600 rounded font-mono text-sm transition-colors"
-      >
-        {creating ? "Creating..." : "+ New Document"}
-      </button>
+      {/* Action buttons */}
+      <div className="flex items-center gap-4">
+        <button
+          onClick={handleNewDocument}
+          disabled={creating}
+          className="px-8 py-3 bg-gray-800 hover:bg-gray-700 disabled:bg-gray-900 disabled:cursor-wait text-gray-200 border border-gray-700 hover:border-gray-600 rounded font-mono text-sm transition-colors"
+        >
+          {creating ? "Creating..." : "+ New Document"}
+        </button>
+        <Link
+          to="/docs"
+          className="px-8 py-3 border border-gray-700 hover:border-gray-600 text-gray-400 hover:text-gray-200 rounded font-mono text-sm transition-colors"
+        >
+          Browse Documents
+        </Link>
+      </div>
 
       {/* Drag-and-drop zone */}
       <div
