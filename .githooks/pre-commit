@@ -1,0 +1,10 @@
+#!/bin/sh
+# Fast CI checks before committing.
+# Installed by: npm run prepare
+
+echo "Running pre-commit checks..."
+
+npm run format:check || { echo "Format check failed. Run: npm run format"; exit 1; }
+npm run lint || { echo "Lint failed. Run: npm run lint -- --fix"; exit 1; }
+npm run typecheck || { echo "Typecheck failed."; exit 1; }
+npm test || { echo "Tests failed."; exit 1; }
