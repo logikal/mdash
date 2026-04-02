@@ -1,0 +1,26 @@
+{
+  "cli_version": "0.5.2",
+  "checkpoint_id": "07d654aed390",
+  "strategy": "manual-commit",
+  "branch": "chore/rename-to-mdash",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".github/workflows/preview-cleanup.yml",
+    ".github/workflows/preview-deploy.yml"
+  ],
+  "sessions": [
+    {
+      "metadata": "/07/d654aed390/0/metadata.json",
+      "transcript": "/07/d654aed390/0/full.jsonl",
+      "content_hash": "/07/d654aed390/0/content_hash.txt",
+      "prompt": "/07/d654aed390/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 601,
+    "cache_creation_tokens": 384470,
+    "cache_read_tokens": 34428639,
+    "output_tokens": 63977,
+    "api_call_count": 291
+  }
+}
