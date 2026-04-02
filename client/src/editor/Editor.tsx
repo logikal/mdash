@@ -31,6 +31,7 @@ import { searchKeymap, highlightSelectionMatches } from "@codemirror/search";
 import { editorTheme, markdownHighlighting } from "./theme";
 import { criticmarkDecorations } from "./criticmark-decorations";
 import { suggestMode, setSuggestModeEffect } from "./suggest-mode";
+import { viewMode, viewModeEffect } from "./view-mode";
 import ModeToolbar from "./ModeToolbar";
 import type { EditorMode } from "./modes";
 import { setAwarenessMode } from "./modes";
@@ -129,7 +130,10 @@ export default function Editor({ initialContent = "", docId }: EditorProps) {
       // Update the CM6 suggest-mode field
       if (viewRef.current) {
         viewRef.current.dispatch({
-          effects: setSuggestModeEffect.of({ mode: newMode }),
+          effects: [
+            setSuggestModeEffect.of({ mode: newMode }),
+            viewModeEffect.of(newMode === "view"),
+          ],
         });
       }
     },
@@ -161,6 +165,7 @@ export default function Editor({ initialContent = "", docId }: EditorProps) {
       syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
       criticmarkDecorations,
       suggestMode(),
+      viewMode(),
     ];
 
     let ydoc: Y.Doc | undefined;
@@ -248,9 +253,12 @@ export default function Editor({ initialContent = "", docId }: EditorProps) {
 
       viewRef.current = view;
 
-      // Set initial suggest-mode state (mode + username)
+      // Set initial mode state (suggest-mode + view-mode + username)
       view.dispatch({
-        effects: setSuggestModeEffect.of({ mode, username }),
+        effects: [
+          setSuggestModeEffect.of({ mode, username }),
+          viewModeEffect.of(mode === "view"),
+        ],
       });
     } else {
       // -- Local-only fallback (no docId) --
@@ -278,9 +286,12 @@ export default function Editor({ initialContent = "", docId }: EditorProps) {
 
       viewRef.current = view;
 
-      // Set initial suggest-mode state (mode + username)
+      // Set initial mode state (suggest-mode + view-mode + username)
       view.dispatch({
-        effects: setSuggestModeEffect.of({ mode, username }),
+        effects: [
+          setSuggestModeEffect.of({ mode, username }),
+          viewModeEffect.of(mode === "view"),
+        ],
       });
     }
 

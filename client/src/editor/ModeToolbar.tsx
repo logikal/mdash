@@ -1,8 +1,7 @@
 /**
  * Mode toolbar: Edit / Suggest / View toggle.
  *
- * Displayed in the editor chrome. View mode is shown but disabled
- * until its respective issue is implemented.
+ * Displayed in the editor chrome. All three modes are functional.
  */
 
 import type { EditorMode } from "./modes";
@@ -20,28 +19,19 @@ export default function ModeToolbar({ mode, onModeChange }: ModeToolbarProps) {
     <div className="flex items-center gap-0.5 bg-gray-900 rounded-md p-0.5 border border-gray-800">
       {MODE_ORDER.map((m) => {
         const isActive = m === mode;
-        // View mode is not yet implemented - show but disable
-        const isDisabled = m === "view";
 
         return (
           <button
             key={m}
-            onClick={() => !isDisabled && onModeChange(m)}
-            disabled={isDisabled}
+            onClick={() => onModeChange(m)}
             className={`
               px-3 py-1 text-xs font-medium rounded transition-colors
               ${isActive
                 ? "bg-gray-700 text-gray-100"
-                : isDisabled
-                  ? "text-gray-600 cursor-not-allowed"
-                  : "text-gray-400 hover:text-gray-200 hover:bg-gray-800"
+                : "text-gray-400 hover:text-gray-200 hover:bg-gray-800"
               }
             `}
-            title={
-              isDisabled
-                ? `${MODE_LABELS[m]} mode coming soon`
-                : `Switch to ${MODE_LABELS[m]} mode`
-            }
+            title={`Switch to ${MODE_LABELS[m]} mode`}
           >
             {MODE_LABELS[m]}
           </button>
