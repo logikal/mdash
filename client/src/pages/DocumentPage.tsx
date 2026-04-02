@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Editor from "../editor/Editor";
-import type { Document } from "@multiplayer-markdown/shared";
+import type { Document } from "@mdash/shared";
 
 export default function DocumentPage() {
   const { docId } = useParams<{ docId: string }>();

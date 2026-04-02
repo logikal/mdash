@@ -1,6 +1,6 @@
-# Multiplayer Markdown Editor
+# mdash
 
-A real-time collaborative markdown editor with CriticMark annotation support, powered by Yjs and WebSockets.
+A real-time collaborative markdown editor powered by Yjs and WebSockets.
 
 ## Self-hosting with Docker Compose
 
