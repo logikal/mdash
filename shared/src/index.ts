@@ -1,5 +1,5 @@
 // Shared types and utilities between client and server
-export const APP_NAME = "Multiplayer Markdown";
+export const APP_NAME = "mdash";
 
 export * from "./criticmark.js";
 

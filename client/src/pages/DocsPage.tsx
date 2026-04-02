@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import type { DocumentSummary } from "@multiplayer-markdown/shared";
+import type { DocumentSummary } from "@mdash/shared";
 
 type FilterMode = "mine" | "all";
 

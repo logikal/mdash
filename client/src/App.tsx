@@ -12,7 +12,7 @@ export default function App() {
             to="/"
             className="text-sm font-semibold tracking-wide text-gray-400 uppercase hover:text-gray-200 transition-colors"
           >
-            Multiplayer Markdown
+            mdash
           </Link>
           <Link
             to="/docs"

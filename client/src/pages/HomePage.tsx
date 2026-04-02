@@ -93,9 +93,7 @@ export default function HomePage() {
     <div className="flex-1 flex flex-col items-center justify-center gap-10 px-4">
       {/* Title */}
       <div className="text-center space-y-3">
-        <h2 className="text-3xl font-bold text-gray-200 font-mono tracking-tight">
-          Multiplayer Markdown
-        </h2>
+        <h2 className="text-3xl font-bold text-gray-200 font-mono tracking-tight">mdash</h2>
         <p className="text-gray-500 text-sm font-mono">Real-time collaborative editing</p>
       </div>
 
