@@ -26,6 +26,7 @@ Workflow:
 5. Run relevant validation/tests/checks. Smoketest using the UI if feasible for the task.
    1. Use your verification skill before calling the task complete.
    2. use the systematic-debugging skill if the tests fail
+   3. If your change adds new user-facing functionality, add smoke tests for it (API-level in `server/src/smoke.test.ts`, or unit tests in the relevant package). Existing smoke tests must continue to pass.
 6. Commit the change.
 7. Leave a short Linear comment summarizing:
    - what changed
