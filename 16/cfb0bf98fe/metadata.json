@@ -1,0 +1,23 @@
+{
+  "cli_version": "0.5.2",
+  "checkpoint_id": "16cfb0bf98fe",
+  "strategy": "manual-commit",
+  "branch": "chore/eslint-10",
+  "checkpoints_count": 1,
+  "files_touched": null,
+  "sessions": [
+    {
+      "metadata": "/16/cfb0bf98fe/0/metadata.json",
+      "transcript": "/16/cfb0bf98fe/0/full.jsonl",
+      "content_hash": "/16/cfb0bf98fe/0/content_hash.txt",
+      "prompt": "/16/cfb0bf98fe/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 480,
+    "cache_creation_tokens": 336973,
+    "cache_read_tokens": 17862443,
+    "output_tokens": 46950,
+    "api_call_count": 194
+  }
+}
