@@ -6,7 +6,8 @@
   "main": "src/index.ts",
   "scripts": {
     "build": "tsc",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage --coverage.reporter=json-summary --coverage.reporter=text"
   },
   "devDependencies": {
     "vitest": "^4.1.2"

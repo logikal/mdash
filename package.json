@@ -13,12 +13,16 @@
     "build": "npm run build -w client && npm run build -w server",
     "start": "npm run start -w server",
     "typecheck": "tsc --noEmit -p client/tsconfig.json && tsc --noEmit -p server/tsconfig.json",
+    "test": "npm run test -w server && npm run test -w shared",
+    "test:smoke": "npm run test:smoke -w server",
+    "test:coverage": "npm run test:coverage -w server && npm run test:coverage -w shared",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
+    "@vitest/coverage-v8": "^4.1.2",
     "concurrently": "^9.1.2",
     "eslint": "^9.39.4",
     "eslint-plugin-react-hooks": "^5.2.0",
