@@ -43,6 +43,7 @@ import ModeToolbar from "./ModeToolbar";
 import SuggestionToolbar from "./SuggestionToolbar";
 import CommentButton from "./CommentButton";
 import CommentPopover from "./CommentPopover";
+import DownloadButton from "./DownloadButton";
 import type { EditorMode } from "./modes";
 import { setAwarenessMode } from "./modes";
 import UsernamePrompt from "./UsernamePrompt";
@@ -363,6 +364,7 @@ export default function Editor({ initialContent = "", docId }: EditorProps) {
           <ModeToolbar mode={mode} onModeChange={handleModeChange} />
           <SuggestionToolbar viewRef={viewRef} />
           <CommentButton viewRef={viewRef} />
+          <DownloadButton viewRef={viewRef} docId={docId} />
         </div>
         <div className="flex items-center gap-3">
           {collaborative && username && (

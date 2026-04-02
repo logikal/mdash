@@ -258,6 +258,43 @@ describe("Smoke tests — API", () => {
     });
   });
 
+  describe("document download — CriticMark preservation", () => {
+    it("PUT /new with CriticMark annotations preserves them in API response", async () => {
+      const markdown = [
+        "# Review Draft",
+        "",
+        "This is {++an added++} sentence.",
+        "This is {--a deleted--} word.",
+        "This was {~~old~>new~~} text.",
+        "{>>@alice 2026-04-01T12:00:00Z: Looks good!<<}",
+        "{==highlighted==}{>>@bob 2026-04-01T13:00:00Z: Check this.<<}",
+      ].join("\n");
+
+      const res = await fetch(`${BASE_URL}/new`, {
+        method: "PUT",
+        body: markdown,
+        redirect: "manual",
+      });
+      expect(res.status).toBe(201);
+
+      const location = res.headers.get("location")!;
+      const slug = location.split("/").pop()!;
+
+      // Fetch via API — this is the same content the download button serializes
+      const docRes = await fetch(`${BASE_URL}/api/docs/${slug}`);
+      expect(docRes.status).toBe(200);
+      const doc = (await docRes.json()) as { content: string };
+
+      // All CriticMark annotations must survive round-trip
+      expect(doc.content).toBe(markdown);
+      expect(doc.content).toContain("{++an added++}");
+      expect(doc.content).toContain("{--a deleted--}");
+      expect(doc.content).toContain("{~~old~>new~~}");
+      expect(doc.content).toContain("{>>@alice");
+      expect(doc.content).toContain("{==highlighted==}");
+    });
+  });
+
   describe("document list page support", () => {
     it("GET /api/docs returns all fields needed by document list page", async () => {
       // Create a document with a title heading
