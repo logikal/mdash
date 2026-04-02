@@ -30,7 +30,7 @@ export default function DocumentPage() {
         if (!cancelled) {
           setDoc(data);
         }
-      } catch (err) {
+      } catch {
         if (!cancelled) {
           setError("Failed to load document");
         }
@@ -49,11 +49,7 @@ export default function DocumentPage() {
   }, [docId]);
 
   if (loading) {
-    return (
-      <div className="flex-1 flex items-center justify-center text-gray-500">
-        Loading...
-      </div>
-    );
+    return <div className="flex-1 flex items-center justify-center text-gray-500">Loading...</div>;
   }
 
   if (error) {
@@ -70,5 +66,5 @@ export default function DocumentPage() {
     );
   }
 
-  return <Editor initialContent={doc?.content ?? ""} docId={docId!} />;
+  return <Editor initialContent={doc?.content ?? ""} docId={docId ?? ""} />;
 }

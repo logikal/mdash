@@ -18,7 +18,10 @@ export const MODE_LABELS: Record<EditorMode, string> = {
  * Set the local user's mode in the Yjs awareness state.
  */
 export function setAwarenessMode(
-  awareness: { getLocalState: () => Record<string, unknown> | null; setLocalState: (state: Record<string, unknown>) => void },
+  awareness: {
+    getLocalState: () => Record<string, unknown> | null;
+    setLocalState: (state: Record<string, unknown>) => void;
+  },
   mode: EditorMode,
 ): void {
   const current = awareness.getLocalState() ?? {};

@@ -27,11 +27,11 @@ volumes:
 
 ### Environment variables
 
-| Variable      | Default                  | Description                              |
-| ------------- | ------------------------ | ---------------------------------------- |
-| `PORT`        | `3000`                   | Port the server listens on               |
-| `STORAGE_DIR` | `/data`                  | Container path for document storage      |
-| `BASE_URL`    | `http://localhost:3000`  | Public URL for generating document links |
+| Variable      | Default                 | Description                              |
+| ------------- | ----------------------- | ---------------------------------------- |
+| `PORT`        | `3000`                  | Port the server listens on               |
+| `STORAGE_DIR` | `/data`                 | Container path for document storage      |
+| `BASE_URL`    | `http://localhost:3000` | Public URL for generating document links |
 
 ### Stopping
 

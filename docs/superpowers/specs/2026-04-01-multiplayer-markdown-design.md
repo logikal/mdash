@@ -156,17 +156,17 @@ Suggestion attribution follows a similar pattern — the author is embedded in t
 
 ## Tech Stack
 
-| Layer | Choice | Why |
-|-------|--------|-----|
-| Frontend framework | React 19 | Ecosystem, CM6 integration |
-| Bundler | Vite | Fast dev, simple config |
-| Styling | Tailwind CSS | Utility-first, rapid UI development |
-| Editor | CodeMirror 6 | Best-in-class extensible editor, markdown support |
-| Collaboration | Yjs + y-codemirror.next | Battle-tested CRDT with CM6 bindings |
-| WebSocket | y-websocket | Yjs WebSocket provider, handles rooms |
-| Server | Node.js + Hono | Lightweight, handles both HTTP and WebSocket |
-| Storage | Flat `.md` files + `.meta.json` sidecars | Simple, portable, no database |
-| Deployment | Docker + Docker Compose | Self-hostable, volume-mountable storage |
+| Layer              | Choice                                   | Why                                               |
+| ------------------ | ---------------------------------------- | ------------------------------------------------- |
+| Frontend framework | React 19                                 | Ecosystem, CM6 integration                        |
+| Bundler            | Vite                                     | Fast dev, simple config                           |
+| Styling            | Tailwind CSS                             | Utility-first, rapid UI development               |
+| Editor             | CodeMirror 6                             | Best-in-class extensible editor, markdown support |
+| Collaboration      | Yjs + y-codemirror.next                  | Battle-tested CRDT with CM6 bindings              |
+| WebSocket          | y-websocket                              | Yjs WebSocket provider, handles rooms             |
+| Server             | Node.js + Hono                           | Lightweight, handles both HTTP and WebSocket      |
+| Storage            | Flat `.md` files + `.meta.json` sidecars | Simple, portable, no database                     |
+| Deployment         | Docker + Docker Compose                  | Self-hostable, volume-mountable storage           |
 
 ## Deployment & Configuration
 
@@ -178,11 +178,11 @@ Suggestion attribution follows a similar pattern — the author is embedded in t
 
 ### Environment Variables
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `STORAGE_DIR` | `./storage` | Path to the `.md` files directory |
-| `PORT` | `3000` | Server port |
-| `BASE_URL` | `http://localhost:3000` | For generating shareable links |
+| Variable      | Default                 | Description                       |
+| ------------- | ----------------------- | --------------------------------- |
+| `STORAGE_DIR` | `./storage`             | Path to the `.md` files directory |
+| `PORT`        | `3000`                  | Server port                       |
+| `BASE_URL`    | `http://localhost:3000` | For generating shareable links    |
 
 ### Future Work (Not in v1)
 

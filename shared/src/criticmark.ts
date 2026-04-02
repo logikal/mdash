@@ -13,12 +13,7 @@
 // Types
 // ---------------------------------------------------------------------------
 
-export type AnnotationType =
-  | "addition"
-  | "deletion"
-  | "substitution"
-  | "comment"
-  | "highlight";
+export type AnnotationType = "addition" | "deletion" | "substitution" | "comment" | "highlight";
 
 export interface BaseAnnotation {
   /** Character offset of the opening delimiter (e.g. `{++`) in the source */
@@ -106,7 +101,8 @@ function parseAuthorPrefix(raw: string): { author?: string; content: string } {
 function parseCommentThreads(body: string): CommentThread[] {
   const threads: CommentThread[] = [];
   // Pattern: @user ISO-timestamp: message
-  const lineRe = /^@(\S+)\s+(\d{4}-\d{2}-\d{2}T[^\s:]+(?::\d{2}[^\s:]*)*(?::\d{2}[^\s]*)?)\s*:\s*([\s\S]*?)$/;
+  const lineRe =
+    /^@(\S+)\s+(\d{4}-\d{2}-\d{2}T[^\s:]+(?::\d{2}[^\s:]*)*(?::\d{2}[^\s]*)?)\s*:\s*([\s\S]*?)$/;
 
   for (const line of body.split("\n")) {
     const trimmed = line.trim();
@@ -220,18 +216,12 @@ export function serializeAnnotation(annotation: Annotation): string {
  * **Important**: annotations must not overlap and should be sorted by `start`.
  * The function sorts them internally for safety.
  */
-export function serialize(
-  original: string,
-  annotations: Annotation[],
-): string {
+export function serialize(original: string, annotations: Annotation[]): string {
   // Sort descending by start so replacements don't shift offsets
   const sorted = [...annotations].sort((a, b) => b.start - a.start);
   let result = original;
   for (const ann of sorted) {
-    result =
-      result.slice(0, ann.start) +
-      serializeAnnotation(ann) +
-      result.slice(ann.end);
+    result = result.slice(0, ann.start) + serializeAnnotation(ann) + result.slice(ann.end);
   }
   return result;
 }

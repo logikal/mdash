@@ -33,11 +33,11 @@ function connectClient(url: string): Promise<BufferedClient> {
     const ws = new WebSocket(url);
     ws.binaryType = "arraybuffer";
     const messages: Uint8Array[] = [];
-    const waiters: Array<{
+    const waiters: {
       resolve: (msg: Uint8Array) => void;
       reject: (err: Error) => void;
       timer: ReturnType<typeof setTimeout>;
-    }> = [];
+    }[] = [];
 
     ws.on("message", (data: ArrayBuffer | Buffer) => {
       let msg: Uint8Array;
@@ -61,7 +61,7 @@ function connectClient(url: string): Promise<BufferedClient> {
         return Promise.resolve(messages.shift()!);
       }
       return new Promise((res, rej) => {
-        const entry: typeof waiters[0] = {
+        const entry: (typeof waiters)[0] = {
           resolve: res,
           reject: rej,
           timer: setTimeout(() => {
@@ -183,7 +183,7 @@ describe("Smoke tests — API", () => {
       expect(createdSlug).toBeTruthy();
       const res = await fetch(`${BASE_URL}/api/docs`);
       expect(res.status).toBe(200);
-      const body = (await res.json()) as { docs: Array<{ slug: string; owner: string }> };
+      const body = (await res.json()) as { docs: { slug: string; owner: string }[] };
       expect(Array.isArray(body.docs)).toBe(true);
       const found = body.docs.find((d) => d.slug === createdSlug);
       expect(found).toBeTruthy();
@@ -308,13 +308,13 @@ describe("Smoke tests — API", () => {
       const res = await fetch(`${BASE_URL}/api/docs`);
       expect(res.status).toBe(200);
       const body = (await res.json()) as {
-        docs: Array<{
+        docs: {
           slug: string;
           title: string;
           owner: string;
           created: string;
           lastModified: string;
-        }>;
+        }[];
       };
 
       const found = body.docs.find((d) => d.slug === slug);
@@ -339,7 +339,7 @@ describe("Smoke tests — API", () => {
 
       const res = await fetch(`${BASE_URL}/api/docs`);
       const body = (await res.json()) as {
-        docs: Array<{ slug: string; title: string }>;
+        docs: { slug: string; title: string }[];
       };
       const found = body.docs.find((d) => d.slug === slug);
       expect(found).toBeTruthy();
@@ -349,7 +349,7 @@ describe("Smoke tests — API", () => {
     it("GET /api/docs returns documents sorted by lastModified descending", async () => {
       const res = await fetch(`${BASE_URL}/api/docs`);
       const body = (await res.json()) as {
-        docs: Array<{ lastModified: string }>;
+        docs: { lastModified: string }[];
       };
       // Verify sort order
       for (let i = 1; i < body.docs.length; i++) {

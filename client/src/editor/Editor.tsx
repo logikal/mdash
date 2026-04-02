@@ -12,22 +12,14 @@ import {
 } from "@codemirror/view";
 import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
 import { languages } from "@codemirror/language-data";
-import {
-  defaultKeymap,
-  history,
-  historyKeymap,
-  indentWithTab,
-} from "@codemirror/commands";
+import { defaultKeymap, history, historyKeymap, indentWithTab } from "@codemirror/commands";
 import {
   bracketMatching,
   indentOnInput,
   syntaxHighlighting,
   defaultHighlightStyle,
 } from "@codemirror/language";
-import {
-  closeBrackets,
-  closeBracketsKeymap,
-} from "@codemirror/autocomplete";
+import { closeBrackets, closeBracketsKeymap } from "@codemirror/autocomplete";
 import { searchKeymap, highlightSelectionMatches } from "@codemirror/search";
 import { editorTheme, markdownHighlighting } from "./theme";
 import { criticmarkDecorations } from "./criticmark-decorations";
@@ -97,17 +89,12 @@ export default function Editor({ initialContent = "", docId }: EditorProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const viewRef = useRef<EditorView | null>(null);
   const providerRef = useRef<WebsocketProvider | null>(null);
-  const [connectionStatus, setConnectionStatus] =
-    useState<ConnectionStatus>("connecting");
+  const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>("connecting");
   const [mode, setMode] = useState<EditorMode>("edit");
 
   // Username state
-  const [username, setUsername] = useState<string | null>(
-    () => getStoredUsername(),
-  );
-  const [showUsernamePrompt, setShowUsernamePrompt] = useState(
-    () => !getStoredUsername(),
-  );
+  const [username, setUsername] = useState<string | null>(() => getStoredUsername());
+  const [showUsernamePrompt, setShowUsernamePrompt] = useState(() => !getStoredUsername());
   const [remoteUsers, setRemoteUsers] = useState<RemoteUser[]>([]);
   const [commentPopover, setCommentPopover] = useState<CommentPopoverState>({
     open: false,
@@ -119,43 +106,37 @@ export default function Editor({ initialContent = "", docId }: EditorProps) {
   const collaborative = Boolean(docId);
 
   // Handle username submission (from prompt or edit)
-  const handleUsernameSubmit = useCallback(
-    (name: string) => {
-      setUsername(name);
-      setStoredUsername(name);
-      setShowUsernamePrompt(false);
-      if (providerRef.current) {
-        setAwarenessUser(providerRef.current.awareness, name);
-      }
-      // Update the CM6 suggest-mode field with the new username
-      if (viewRef.current) {
-        viewRef.current.dispatch({
-          effects: setSuggestModeEffect.of({ username: name }),
-        });
-      }
-    },
-    [],
-  );
+  const handleUsernameSubmit = useCallback((name: string) => {
+    setUsername(name);
+    setStoredUsername(name);
+    setShowUsernamePrompt(false);
+    if (providerRef.current) {
+      setAwarenessUser(providerRef.current.awareness, name);
+    }
+    // Update the CM6 suggest-mode field with the new username
+    if (viewRef.current) {
+      viewRef.current.dispatch({
+        effects: setSuggestModeEffect.of({ username: name }),
+      });
+    }
+  }, []);
 
   // Sync mode changes to Yjs awareness + CM6 suggest-mode state
-  const handleModeChange = useCallback(
-    (newMode: EditorMode) => {
-      setMode(newMode);
-      if (providerRef.current) {
-        setAwarenessMode(providerRef.current.awareness, newMode);
-      }
-      // Update the CM6 suggest-mode field
-      if (viewRef.current) {
-        viewRef.current.dispatch({
-          effects: [
-            setSuggestModeEffect.of({ mode: newMode }),
-            viewModeEffect.of(newMode === "view"),
-          ],
-        });
-      }
-    },
-    [],
-  );
+  const handleModeChange = useCallback((newMode: EditorMode) => {
+    setMode(newMode);
+    if (providerRef.current) {
+      setAwarenessMode(providerRef.current.awareness, newMode);
+    }
+    // Update the CM6 suggest-mode field
+    if (viewRef.current) {
+      viewRef.current.dispatch({
+        effects: [
+          setSuggestModeEffect.of({ mode: newMode }),
+          viewModeEffect.of(newMode === "view"),
+        ],
+      });
+    }
+  }, []);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -191,10 +172,7 @@ export default function Editor({ initialContent = "", docId }: EditorProps) {
         if (popState) {
           setCommentPopover((prev) => {
             // Only update if something changed
-            if (
-              prev.open !== popState.open ||
-              prev.comment?.start !== popState.comment?.start
-            ) {
+            if (prev.open !== popState.open || prev.comment?.start !== popState.comment?.start) {
               return popState;
             }
             return prev;
@@ -212,15 +190,10 @@ export default function Editor({ initialContent = "", docId }: EditorProps) {
 
       // y-websocket builds URL as `${serverUrl}/${roomname}?${params}`.
       // Server matches paths starting with /ws and reads `doc` from query params.
-      provider = new WebsocketProvider(
-        getWsUrl(),
-        docId,
-        ydoc,
-        {
-          connect: true,
-          params: { doc: docId },
-        }
-      );
+      provider = new WebsocketProvider(getWsUrl(), docId, ydoc, {
+        connect: true,
+        params: { doc: docId },
+      });
       providerRef.current = provider;
 
       // Set user info in awareness
@@ -290,10 +263,7 @@ export default function Editor({ initialContent = "", docId }: EditorProps) {
 
       // Set initial mode state (suggest-mode + view-mode + username)
       view.dispatch({
-        effects: [
-          setSuggestModeEffect.of({ mode, username }),
-          viewModeEffect.of(mode === "view"),
-        ],
+        effects: [setSuggestModeEffect.of({ mode, username }), viewModeEffect.of(mode === "view")],
       });
     } else {
       // -- Local-only fallback (no docId) --
@@ -323,10 +293,7 @@ export default function Editor({ initialContent = "", docId }: EditorProps) {
 
       // Set initial mode state (suggest-mode + view-mode + username)
       view.dispatch({
-        effects: [
-          setSuggestModeEffect.of({ mode, username }),
-          viewModeEffect.of(mode === "view"),
-        ],
+        effects: [setSuggestModeEffect.of({ mode, username }), viewModeEffect.of(mode === "view")],
       });
     }
 
@@ -346,6 +313,7 @@ export default function Editor({ initialContent = "", docId }: EditorProps) {
         ydoc.destroy();
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- editor is intentionally only recreated when docId/username change
   }, [docId, username]);
 
   return (

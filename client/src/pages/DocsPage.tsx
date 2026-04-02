@@ -101,9 +101,7 @@ export default function DocsPage() {
       <div className="w-full max-w-2xl space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold text-gray-200 font-mono">
-            Documents
-          </h2>
+          <h2 className="text-xl font-bold text-gray-200 font-mono">Documents</h2>
           <div className="flex items-center gap-3">
             <button
               onClick={handleToggleFilter}
@@ -154,14 +152,10 @@ export default function DocsPage() {
                   <p className="text-sm text-gray-200 font-mono truncate group-hover:text-white transition-colors">
                     {doc.title}
                   </p>
-                  <p className="text-xs text-gray-600 font-mono mt-0.5">
-                    {doc.owner}
-                  </p>
+                  <p className="text-xs text-gray-600 font-mono mt-0.5">{doc.owner}</p>
                 </div>
                 <div className="shrink-0 text-right ml-4">
-                  <p className="text-xs text-gray-600 font-mono">
-                    {formatDate(doc.lastModified)}
-                  </p>
+                  <p className="text-xs text-gray-600 font-mono">{formatDate(doc.lastModified)}</p>
                 </div>
               </Link>
             ))}

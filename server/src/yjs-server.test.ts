@@ -52,7 +52,7 @@ function connectClient(port: number, docId: string): Promise<BufferedClient> {
     const ws = new WebSocket(`ws://127.0.0.1:${port}/ws?doc=${docId}`);
     ws.binaryType = "arraybuffer";
     const messages: Uint8Array[] = [];
-    const waiters: Array<(msg: Uint8Array) => void> = [];
+    const waiters: ((msg: Uint8Array) => void)[] = [];
 
     ws.on("message", (data: ArrayBuffer | Buffer) => {
       let msg: Uint8Array;
@@ -74,10 +74,7 @@ function connectClient(port: number, docId: string): Promise<BufferedClient> {
         return Promise.resolve(messages.shift()!);
       }
       return new Promise((resolve, reject) => {
-        const timer = setTimeout(
-          () => reject(new Error("waitForMessage timed out")),
-          timeoutMs
-        );
+        const timer = setTimeout(() => reject(new Error("waitForMessage timed out")), timeoutMs);
         waiters.push((msg) => {
           clearTimeout(timer);
           resolve(msg);

@@ -26,9 +26,7 @@ export default function UsernamePrompt({ defaultValue, onSubmit }: UsernamePromp
         onSubmit={handleSubmit}
         className="bg-gray-900 border border-gray-700 rounded-lg p-6 shadow-xl w-80"
       >
-        <h2 className="text-gray-100 text-sm font-semibold mb-1">
-          Choose a username
-        </h2>
+        <h2 className="text-gray-100 text-sm font-semibold mb-1">Choose a username</h2>
         <p className="text-gray-400 text-xs mb-4">
           This name will be shown to other editors next to your cursor.
         </p>

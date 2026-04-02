@@ -26,7 +26,7 @@ export default function HomePage() {
         setCreating(false);
       }
     },
-    [navigate]
+    [navigate],
   );
 
   const handleNewDocument = useCallback(async () => {
@@ -35,7 +35,11 @@ export default function HomePage() {
 
   const handleFile = useCallback(
     (file: File) => {
-      if (!file.name.endsWith(".md") && file.type !== "text/markdown" && file.type !== "text/plain") {
+      if (
+        !file.name.endsWith(".md") &&
+        file.type !== "text/markdown" &&
+        file.type !== "text/plain"
+      ) {
         return;
       }
       const reader = new FileReader();
@@ -45,7 +49,7 @@ export default function HomePage() {
       };
       reader.readAsText(file);
     },
-    [createDocWithContent]
+    [createDocWithContent],
   );
 
   const handleDrop = useCallback(
@@ -55,7 +59,7 @@ export default function HomePage() {
       const file = e.dataTransfer.files[0];
       if (file) handleFile(file);
     },
-    [handleFile]
+    [handleFile],
   );
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
@@ -73,7 +77,7 @@ export default function HomePage() {
       const file = e.target.files?.[0];
       if (file) handleFile(file);
     },
-    [handleFile]
+    [handleFile],
   );
 
   const curlCommand = `curl ${window.location.origin}/new -T file.md`;
@@ -92,9 +96,7 @@ export default function HomePage() {
         <h2 className="text-3xl font-bold text-gray-200 font-mono tracking-tight">
           Multiplayer Markdown
         </h2>
-        <p className="text-gray-500 text-sm font-mono">
-          Real-time collaborative editing
-        </p>
+        <p className="text-gray-500 text-sm font-mono">Real-time collaborative editing</p>
       </div>
 
       {/* Action buttons */}
@@ -163,9 +165,7 @@ export default function HomePage() {
           Or upload from the command line:
         </p>
         <div className="flex items-center gap-2 bg-gray-900 border border-gray-800 rounded px-4 py-3 font-mono text-xs text-gray-400">
-          <code className="flex-1 overflow-x-auto whitespace-nowrap select-all">
-            {curlCommand}
-          </code>
+          <code className="flex-1 overflow-x-auto whitespace-nowrap select-all">{curlCommand}</code>
           <button
             onClick={(e) => {
               e.stopPropagation();

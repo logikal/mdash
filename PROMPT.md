@@ -3,8 +3,8 @@ Linear project `markdowneditor`
 
 Your job is to pick the best next issue yourself.
 
-
 Rules:
+
 - Use Linear as the task source of truth.
 - Prefer unblocked issues in `Todo` first, then `Backlog`.
 - Respect blockers and do not pull in downstream scope.
@@ -16,6 +16,7 @@ Rules:
 - Do not commit secrets. If server access is needed and credentials are missing, stop and report exactly what access detail is needed.
 
 Workflow:
+
 1. Inspect Linear and choose the best next unblocked issue.
 2. Move that issue to `In Progress`.
 3. Summarize:

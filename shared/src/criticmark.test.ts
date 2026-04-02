@@ -3,7 +3,6 @@ import {
   parse,
   serialize,
   serializeAnnotation,
-  type Annotation,
   type AdditionAnnotation,
   type DeletionAnnotation,
   type SubstitutionAnnotation,
@@ -127,9 +126,7 @@ continued here<<}`;
     const md = "{++line one\nline two++}";
     const annotations = parse(md);
     expect(annotations).toHaveLength(1);
-    expect((annotations[0] as AdditionAnnotation).content).toBe(
-      "line one\nline two",
-    );
+    expect((annotations[0] as AdditionAnnotation).content).toBe("line one\nline two");
   });
 
   it("handles multiline substitution", () => {
