@@ -33,6 +33,14 @@ import { criticmarkDecorations } from "./criticmark-decorations";
 import ModeToolbar from "./ModeToolbar";
 import type { EditorMode } from "./modes";
 import { setAwarenessMode } from "./modes";
+import UsernamePrompt from "./UsernamePrompt";
+import UserPresence from "./UserPresence";
+import {
+  getStoredUsername,
+  setStoredUsername,
+  generateAnonName,
+  setAwarenessUser,
+} from "./user-awareness";
 
 import * as Y from "yjs";
 import { WebsocketProvider } from "y-websocket";
@@ -44,6 +52,11 @@ interface EditorProps {
 }
 
 type ConnectionStatus = "connecting" | "connected" | "disconnected";
+
+interface RemoteUser {
+  name: string;
+  color: string;
+}
 
 function getWsUrl(): string {
   const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
@@ -75,7 +88,29 @@ export default function Editor({ initialContent = "", docId }: EditorProps) {
     useState<ConnectionStatus>("connecting");
   const [mode, setMode] = useState<EditorMode>("edit");
 
+  // Username state
+  const [username, setUsername] = useState<string | null>(
+    () => getStoredUsername(),
+  );
+  const [showUsernamePrompt, setShowUsernamePrompt] = useState(
+    () => !getStoredUsername(),
+  );
+  const [remoteUsers, setRemoteUsers] = useState<RemoteUser[]>([]);
+
   const collaborative = Boolean(docId);
+
+  // Handle username submission (from prompt or edit)
+  const handleUsernameSubmit = useCallback(
+    (name: string) => {
+      setUsername(name);
+      setStoredUsername(name);
+      setShowUsernamePrompt(false);
+      if (providerRef.current) {
+        setAwarenessUser(providerRef.current.awareness, name);
+      }
+    },
+    [],
+  );
 
   // Sync mode changes to Yjs awareness
   const handleModeChange = useCallback(
@@ -90,6 +125,8 @@ export default function Editor({ initialContent = "", docId }: EditorProps) {
 
   useEffect(() => {
     if (!containerRef.current) return;
+    // Don't create editor until we have a username
+    if (!username) return;
 
     // Shared base extensions (no keymap yet -- added per mode below)
     const baseExtensions = [
@@ -132,6 +169,9 @@ export default function Editor({ initialContent = "", docId }: EditorProps) {
       );
       providerRef.current = provider;
 
+      // Set user info in awareness
+      setAwarenessUser(provider.awareness, username);
+
       // Set initial mode in awareness
       setAwarenessMode(provider.awareness, mode);
 
@@ -148,6 +188,28 @@ export default function Editor({ initialContent = "", docId }: EditorProps) {
       provider.on("connection-close", () => {
         setConnectionStatus("disconnected");
       });
+
+      // Track remote users via awareness
+      const updateRemoteUsers = () => {
+        if (!provider) return;
+        const states = provider.awareness.getStates();
+        const localClientId = provider.awareness.clientID;
+        const users: RemoteUser[] = [];
+        states.forEach((state, clientId) => {
+          if (clientId === localClientId) return;
+          if (state.user?.name) {
+            users.push({
+              name: state.user.name,
+              color: state.user.color || "#60a5fa",
+            });
+          }
+        });
+        setRemoteUsers(users);
+      };
+
+      provider.awareness.on("change", updateRemoteUsers);
+      // Initial population
+      updateRemoteUsers();
 
       const ytext = ydoc.getText("codemirror");
 
@@ -214,14 +276,31 @@ export default function Editor({ initialContent = "", docId }: EditorProps) {
         ydoc.destroy();
       }
     };
-  }, [docId]);
+  }, [docId, username]);
 
   return (
     <div className="relative flex-1 min-h-0 flex flex-col overflow-hidden">
+      {/* Username prompt modal */}
+      {showUsernamePrompt && (
+        <UsernamePrompt
+          defaultValue={username || generateAnonName()}
+          onSubmit={handleUsernameSubmit}
+        />
+      )}
+
       {/* Editor toolbar */}
       <div className="flex items-center justify-between px-4 py-1.5 border-b border-gray-800 bg-gray-950">
         <ModeToolbar mode={mode} onModeChange={handleModeChange} />
-        {collaborative && <ConnectionIndicator status={connectionStatus} />}
+        <div className="flex items-center gap-3">
+          {collaborative && username && (
+            <UserPresence
+              username={username}
+              remoteUsers={remoteUsers}
+              onEditUsername={() => setShowUsernamePrompt(true)}
+            />
+          )}
+          {collaborative && <ConnectionIndicator status={connectionStatus} />}
+        </div>
       </div>
 
       {/* Editor area */}
