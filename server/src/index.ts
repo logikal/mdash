@@ -33,7 +33,24 @@ app.get("/api/docs/:docId", (c) => {
 // Create new document, redirect to editor
 app.post("/new", async (c) => {
   const owner = "anonymous"; // Will be set from client later
-  const slug = storage.create(owner);
+  let content = "";
+
+  // Support uploading markdown content in the request body
+  const contentType = c.req.header("content-type") ?? "";
+  if (contentType.includes("application/json")) {
+    try {
+      const body = await c.req.json();
+      content = body.content ?? "";
+    } catch {
+      // Ignore parse errors, create empty doc
+    }
+  } else {
+    // Raw text body (for curl -T uploads and plain POST)
+    const text = await c.req.text();
+    if (text) content = text;
+  }
+
+  const slug = storage.create(owner, content);
   return c.redirect(`/${slug}`, 303);
 });
 
