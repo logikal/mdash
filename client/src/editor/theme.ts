@@ -202,8 +202,7 @@ export const editorTheme = EditorView.theme(
       top: "-1.2em",
       left: "-1px",
       fontSize: ".7em",
-      fontFamily:
-        '"JetBrains Mono", ui-monospace, SFMono-Regular, monospace',
+      fontFamily: '"JetBrains Mono", ui-monospace, SFMono-Regular, monospace',
       fontStyle: "normal",
       fontWeight: "600",
       lineHeight: "normal",

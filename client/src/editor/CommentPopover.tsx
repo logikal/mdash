@@ -13,11 +13,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import type { EditorView } from "@codemirror/view";
 import type { CommentPopoverState } from "./comment-extension";
-import {
-  appendCommentEntry,
-  closeCommentPopover,
-  resolveComment,
-} from "./comment-extension";
+import { appendCommentEntry, closeCommentPopover, resolveComment } from "./comment-extension";
 
 interface CommentPopoverProps {
   state: CommentPopoverState;
@@ -65,10 +61,7 @@ export default function CommentPopover({
     if (!state.open) return;
 
     const handleClickOutside = (e: MouseEvent) => {
-      if (
-        popoverRef.current &&
-        !popoverRef.current.contains(e.target as Node)
-      ) {
+      if (popoverRef.current && !popoverRef.current.contains(e.target as Node)) {
         if (viewRef.current) {
           closeCommentPopover(viewRef.current);
         }
@@ -88,12 +81,7 @@ export default function CommentPopover({
 
   const handleSubmit = useCallback(() => {
     if (!replyText.trim() || !viewRef.current || !state.comment) return;
-    appendCommentEntry(
-      viewRef.current,
-      state.comment,
-      username,
-      replyText.trim(),
-    );
+    appendCommentEntry(viewRef.current, state.comment, username, replyText.trim());
     setReplyText("");
   }, [replyText, viewRef, state.comment, username]);
 
@@ -151,14 +139,9 @@ export default function CommentPopover({
       <div className="max-h-60 overflow-y-auto">
         {hasThreads ? (
           comment.threads.map((thread, i) => (
-            <div
-              key={i}
-              className="px-3 py-2 border-b border-gray-800/50 last:border-0"
-            >
+            <div key={i} className="px-3 py-2 border-b border-gray-800/50 last:border-0">
               <div className="flex items-baseline gap-2 mb-0.5">
-                <span className="text-xs font-semibold text-blue-400">
-                  @{thread.user}
-                </span>
+                <span className="text-xs font-semibold text-blue-400">@{thread.user}</span>
                 <span className="text-[10px] text-gray-500">
                   {formatTimestamp(thread.timestamp)}
                 </span>

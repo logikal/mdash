@@ -8,6 +8,7 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "test": "vitest run --exclude src/smoke.test.ts",
+    "test:coverage": "vitest run --coverage --coverage.reporter=json-summary --coverage.reporter=text --exclude src/smoke.test.ts",
     "test:smoke": "vitest run src/smoke.test.ts"
   },
   "dependencies": {

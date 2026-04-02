@@ -1,12 +1,5 @@
 import { randomBytes } from "node:crypto";
-import {
-  existsSync,
-  mkdirSync,
-  readFileSync,
-  readdirSync,
-  statSync,
-  writeFileSync,
-} from "node:fs";
+import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import type { Document, DocumentMeta, DocumentSummary } from "@multiplayer-markdown/shared";
 
@@ -120,7 +113,7 @@ export class Storage {
 
     // Sort by last modified, newest first
     summaries.sort(
-      (a, b) => new Date(b.lastModified).getTime() - new Date(a.lastModified).getTime()
+      (a, b) => new Date(b.lastModified).getTime() - new Date(a.lastModified).getTime(),
     );
 
     return summaries;

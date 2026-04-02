@@ -10,12 +10,7 @@
  * CriticMark decorations remain visible and interactive (for M4 features).
  */
 
-import {
-  StateField,
-  StateEffect,
-  type Extension,
-  Compartment,
-} from "@codemirror/state";
+import { StateField, StateEffect, type Extension, Compartment } from "@codemirror/state";
 import { EditorView } from "@codemirror/view";
 
 /** Effect to toggle view mode on/off. */
@@ -78,9 +73,7 @@ const viewModeUpdater = EditorView.updateListener.of((update) => {
 
     // Reconfigure readOnly
     update.view.dispatch({
-      effects: readOnlyCompartment.reconfigure(
-        isViewMode ? EditorView.editable.of(false) : [],
-      ),
+      effects: readOnlyCompartment.reconfigure(isViewMode ? EditorView.editable.of(false) : []),
     });
   }
 });
@@ -90,10 +83,5 @@ const viewModeUpdater = EditorView.updateListener.of((update) => {
  * Add this to your editor's extensions array.
  */
 export function viewMode(): Extension {
-  return [
-    viewModeField,
-    viewModeTheme,
-    viewModeUpdater,
-    readOnlyCompartment.of([]),
-  ];
+  return [viewModeField, viewModeTheme, viewModeUpdater, readOnlyCompartment.of([])];
 }

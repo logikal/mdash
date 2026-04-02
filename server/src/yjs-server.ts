@@ -1,4 +1,5 @@
 import { IncomingMessage } from "node:http";
+import type { Duplex } from "node:stream";
 import { WebSocket, WebSocketServer } from "ws";
 import * as Y from "yjs";
 import * as syncProtocol from "y-protocols/sync";
@@ -43,7 +44,7 @@ export class YjsServer {
   }
 
   /** Handle an HTTP upgrade request (called from the Node http server). */
-  handleUpgrade(req: IncomingMessage, socket: any, head: Buffer): void {
+  handleUpgrade(req: IncomingMessage, socket: Duplex, head: Buffer): void {
     // Only handle upgrades to /ws
     const url = new URL(req.url ?? "/", `http://${req.headers.host}`);
     if (!url.pathname.startsWith("/ws")) {
@@ -71,7 +72,7 @@ export class YjsServer {
       ytext.insert(0, stored.content);
     }
 
-    room = {
+    const newRoom: Room = {
       doc,
       awareness,
       clients: new Set(),
@@ -79,15 +80,16 @@ export class YjsServer {
       dirty: false,
       docId,
     };
+    room = newRoom;
 
     // Listen for doc updates to mark room as dirty
     doc.on("update", () => {
-      room!.dirty = true;
+      newRoom.dirty = true;
     });
 
     // Start periodic flush timer
     room.flushTimer = setInterval(() => {
-      this.flushRoom(room!);
+      this.flushRoom(newRoom);
     }, FLUSH_INTERVAL_MS);
 
     this.rooms.set(docId, room);
@@ -110,7 +112,7 @@ export class YjsServer {
     // Send current awareness states
     const awarenessStates = awarenessProtocol.encodeAwarenessUpdate(
       room.awareness,
-      Array.from(room.awareness.getStates().keys())
+      Array.from(room.awareness.getStates().keys()),
     );
     if (awarenessStates.length > 1) {
       const encoder = encoding.createEncoder();
@@ -120,16 +122,21 @@ export class YjsServer {
     }
 
     // Handle awareness changes — broadcast to other clients
-    const awarenessChangeHandler = (
-      { added, updated, removed }: { added: number[]; updated: number[]; removed: number[] },
-      _origin: any
-    ) => {
+    const awarenessChangeHandler = ({
+      added,
+      updated,
+      removed,
+    }: {
+      added: number[];
+      updated: number[];
+      removed: number[];
+    }) => {
       const changedClients = added.concat(updated, removed);
       const encoder = encoding.createEncoder();
       encoding.writeVarUint(encoder, MSG_AWARENESS);
       encoding.writeVarUint8Array(
         encoder,
-        awarenessProtocol.encodeAwarenessUpdate(room.awareness, changedClients)
+        awarenessProtocol.encodeAwarenessUpdate(room.awareness, changedClients),
       );
       const msg = encoding.toUint8Array(encoder);
       for (const client of room.clients) {
@@ -143,7 +150,11 @@ export class YjsServer {
     ws.on("message", (data: Buffer | ArrayBuffer | Buffer[]) => {
       try {
         const buf = Array.isArray(data) ? Buffer.concat(data) : data;
-        const message = new Uint8Array(buf instanceof ArrayBuffer ? buf : buf.buffer, buf instanceof ArrayBuffer ? 0 : buf.byteOffset, buf instanceof ArrayBuffer ? buf.byteLength : buf.byteLength);
+        const message = new Uint8Array(
+          buf instanceof ArrayBuffer ? buf : buf.buffer,
+          buf instanceof ArrayBuffer ? 0 : buf.byteOffset,
+          buf instanceof ArrayBuffer ? buf.byteLength : buf.byteLength,
+        );
         const decoder = decoding.createDecoder(message);
         const msgType = decoding.readVarUint(decoder);
 
@@ -172,7 +183,7 @@ export class YjsServer {
             awarenessProtocol.applyAwarenessUpdate(
               room.awareness,
               decoding.readVarUint8Array(decoder),
-              ws
+              ws,
             );
             break;
           }
@@ -187,11 +198,7 @@ export class YjsServer {
       room.awareness.off("update", awarenessChangeHandler);
 
       // Remove awareness state for this client
-      awarenessProtocol.removeAwarenessStates(
-        room.awareness,
-        [room.doc.clientID],
-        null
-      );
+      awarenessProtocol.removeAwarenessStates(room.awareness, [room.doc.clientID], null);
 
       if (room.clients.size === 0) {
         this.cleanupRoom(docId);

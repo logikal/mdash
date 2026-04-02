@@ -16,11 +16,7 @@ interface UserPresenceProps {
   onEditUsername: () => void;
 }
 
-export default function UserPresence({
-  username,
-  remoteUsers,
-  onEditUsername,
-}: UserPresenceProps) {
+export default function UserPresence({ username, remoteUsers, onEditUsername }: UserPresenceProps) {
   const myColor = getUserColor(username).color;
 
   return (
@@ -45,10 +41,7 @@ export default function UserPresence({
         className="flex items-center gap-1.5 text-xs text-gray-300 hover:text-gray-100 transition-colors"
         title="Click to change your name"
       >
-        <span
-          className="w-2 h-2 rounded-full shrink-0"
-          style={{ backgroundColor: myColor }}
-        />
+        <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: myColor }} />
         <span className="max-w-[100px] truncate">{username}</span>
       </button>
     </div>

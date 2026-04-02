@@ -26,9 +26,10 @@ export default function ModeToolbar({ mode, onModeChange }: ModeToolbarProps) {
             onClick={() => onModeChange(m)}
             className={`
               px-3 py-1 text-xs font-medium rounded transition-colors
-              ${isActive
-                ? "bg-gray-700 text-gray-100"
-                : "text-gray-400 hover:text-gray-200 hover:bg-gray-800"
+              ${
+                isActive
+                  ? "bg-gray-700 text-gray-100"
+                  : "text-gray-400 hover:text-gray-200 hover:bg-gray-800"
               }
             `}
             title={`Switch to ${MODE_LABELS[m]} mode`}

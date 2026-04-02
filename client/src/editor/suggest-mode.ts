@@ -194,8 +194,5 @@ function suggestModeFilter(tr: Transaction): TransactionSpec | readonly Transact
  * Add this to your editor's extensions array.
  */
 export function suggestMode() {
-  return [
-    suggestModeField,
-    EditorState.transactionFilter.of(suggestModeFilter),
-  ];
+  return [suggestModeField, EditorState.transactionFilter.of(suggestModeFilter)];
 }

@@ -7,17 +7,8 @@
  * - Exposes a StateField so React can read popover state and render the UI
  */
 
-import {
-  StateField,
-  StateEffect,
-  type EditorState,
-} from "@codemirror/state";
-import {
-  EditorView,
-  keymap,
-  type ViewUpdate,
-  ViewPlugin,
-} from "@codemirror/view";
+import { StateField, StateEffect, type EditorState } from "@codemirror/state";
+import { EditorView, keymap, ViewPlugin } from "@codemirror/view";
 import { suggestModeField } from "./suggest-mode";
 
 // ---------------------------------------------------------------------------
@@ -108,10 +99,7 @@ function parseCommentThreads(body: string): CommentThread[] {
 // Find comment at a document position
 // ---------------------------------------------------------------------------
 
-function findCommentAt(
-  state: EditorState,
-  pos: number,
-): CommentAnnotation | null {
+function findCommentAt(state: EditorState, pos: number): CommentAnnotation | null {
   const text = state.doc.toString();
   COMMENT_RE.lastIndex = 0;
   let match: RegExpExecArray | null;
@@ -138,10 +126,8 @@ function findCommentAt(
 // ---------------------------------------------------------------------------
 
 const commentClickPlugin = ViewPlugin.fromClass(
-  class {
-    constructor(_view: EditorView) {}
-    update(_update: ViewUpdate) {}
-  },
+  // eslint-disable-next-line @typescript-eslint/no-extraneous-class -- required by CodeMirror ViewPlugin.fromClass API
+  class {},
   {
     eventHandlers: {
       mousedown(event: MouseEvent, view: EditorView) {
@@ -175,10 +161,8 @@ const commentClickPlugin = ViewPlugin.fromClass(
 // ---------------------------------------------------------------------------
 
 const commentDismissPlugin = ViewPlugin.fromClass(
-  class {
-    constructor(_view: EditorView) {}
-    update(_update: ViewUpdate) {}
-  },
+  // eslint-disable-next-line @typescript-eslint/no-extraneous-class -- required by CodeMirror ViewPlugin.fromClass API
+  class {},
   {
     eventHandlers: {
       keydown(event: KeyboardEvent, view: EditorView) {
@@ -220,7 +204,6 @@ function addCommentCommand(view: EditorView): boolean {
   const smState = view.state.field(suggestModeField, false);
   const username = smState?.username || "anonymous";
   const timestamp = new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
-  const selectedText = view.state.sliceDoc(from, to);
   // Insert comment right after the selection
   const commentText = `{>>@${username} ${timestamp}: <<}`;
   const insertPos = to;
@@ -271,10 +254,7 @@ export function appendCommentEntry(
  * Resolve a comment by removing its `{>>...<<}` annotation from the document.
  * The CriticMark is stripped entirely, leaving clean markdown.
  */
-export function resolveComment(
-  view: EditorView,
-  comment: CommentAnnotation,
-): void {
+export function resolveComment(view: EditorView, comment: CommentAnnotation): void {
   view.dispatch({
     changes: { from: comment.start, to: comment.end, insert: "" },
     effects: commentPopoverEffect.of(defaultPopoverState),
@@ -296,10 +276,5 @@ export function closeCommentPopover(view: EditorView): void {
 // ---------------------------------------------------------------------------
 
 export function commentExtension() {
-  return [
-    commentPopoverField,
-    commentClickPlugin,
-    commentDismissPlugin,
-    commentKeymap,
-  ];
+  return [commentPopoverField, commentClickPlugin, commentDismissPlugin, commentKeymap];
 }

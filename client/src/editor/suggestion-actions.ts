@@ -28,8 +28,7 @@ import { RangeSetBuilder } from "@codemirror/state";
 // Regex for CriticMark suggestions (additions, deletions, substitutions only)
 // ---------------------------------------------------------------------------
 
-const SUGGESTION_RE =
-  /\{\+\+([\s\S]*?)\+\+\}|\{--([\s\S]*?)--\}|\{~~([\s\S]*?)~>([\s\S]*?)~~\}/g;
+const SUGGESTION_RE = /\{\+\+([\s\S]*?)\+\+\}|\{--([\s\S]*?)--\}|\{~~([\s\S]*?)~>([\s\S]*?)~~\}/g;
 
 // ---------------------------------------------------------------------------
 // Parse author prefix from content (e.g. "@user: actual text" -> "actual text")
@@ -226,10 +225,7 @@ export const suggestionActions = ViewPlugin.fromClass(
  * Find all CriticMark suggestions in the full document and resolve them.
  * Must process from end to start to avoid offset shifting.
  */
-export function resolveAllSuggestions(
-  view: EditorView,
-  action: "accept" | "reject",
-): void {
+export function resolveAllSuggestions(view: EditorView, action: "accept" | "reject"): void {
   const doc = view.state.doc;
   const text = doc.toString();
 
