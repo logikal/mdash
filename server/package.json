@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@hono/node-server": "^1.14.1",
-    "hono": "^4.7.6",
+    "hono": "^4.12.10",
     "ws": "^8.20.0",
     "y-protocols": "^1.0.7",
     "yjs": "^13.6.30"
