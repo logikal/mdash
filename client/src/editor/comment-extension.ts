@@ -264,6 +264,24 @@ export function appendCommentEntry(
 }
 
 // ---------------------------------------------------------------------------
+// Resolve (remove) a comment annotation from the document
+// ---------------------------------------------------------------------------
+
+/**
+ * Resolve a comment by removing its `{>>...<<}` annotation from the document.
+ * The CriticMark is stripped entirely, leaving clean markdown.
+ */
+export function resolveComment(
+  view: EditorView,
+  comment: CommentAnnotation,
+): void {
+  view.dispatch({
+    changes: { from: comment.start, to: comment.end, insert: "" },
+    effects: commentPopoverEffect.of(defaultPopoverState),
+  });
+}
+
+// ---------------------------------------------------------------------------
 // Close the popover programmatically
 // ---------------------------------------------------------------------------
 

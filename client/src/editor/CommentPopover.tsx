@@ -16,6 +16,7 @@ import type { CommentPopoverState } from "./comment-extension";
 import {
   appendCommentEntry,
   closeCommentPopover,
+  resolveComment,
 } from "./comment-extension";
 
 interface CommentPopoverProps {
@@ -96,6 +97,11 @@ export default function CommentPopover({
     setReplyText("");
   }, [replyText, viewRef, state.comment, username]);
 
+  const handleResolve = useCallback(() => {
+    if (!viewRef.current || !state.comment) return;
+    resolveComment(viewRef.current, state.comment);
+  }, [viewRef, state.comment]);
+
   if (!state.open || !state.comment || !state.coords) return null;
 
   const { comment, coords } = state;
@@ -119,15 +125,26 @@ export default function CommentPopover({
       {/* Header */}
       <div className="flex items-center justify-between px-3 py-2 border-b border-gray-800">
         <span className="text-xs font-medium text-gray-300">Comment</span>
-        <button
-          onClick={() => {
-            if (viewRef.current) closeCommentPopover(viewRef.current);
-          }}
-          className="text-gray-500 hover:text-gray-300 text-sm leading-none px-1"
-          title="Close"
-        >
-          &#x2715;
-        </button>
+        <div className="flex items-center gap-1">
+          <button
+            onClick={handleResolve}
+            className="px-1.5 py-0.5 text-[10px] font-medium rounded transition-colors
+              text-green-400 hover:text-green-300 hover:bg-green-900/30
+              border border-green-800/50 hover:border-green-700/50"
+            title="Resolve comment (removes annotation)"
+          >
+            Resolve
+          </button>
+          <button
+            onClick={() => {
+              if (viewRef.current) closeCommentPopover(viewRef.current);
+            }}
+            className="text-gray-500 hover:text-gray-300 text-sm leading-none px-1"
+            title="Close"
+          >
+            &#x2715;
+          </button>
+        </div>
       </div>
 
       {/* Thread entries */}
