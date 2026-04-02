@@ -1,0 +1,14 @@
+There's a left-side giant space that we don't want.
+We also need to enable wordwrap by default.
+
+---
+
+trying to select text only makes the cursor move. I can't actually select text.
+
+---
+
+sorry, accidentally hit esc. continue
+
+---
+
+/teleport
