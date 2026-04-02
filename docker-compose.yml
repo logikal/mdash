@@ -1,0 +1,15 @@
+services:
+  app:
+    build: .
+    ports:
+      - "${PORT:-3000}:${PORT:-3000}"
+    environment:
+      - PORT=${PORT:-3000}
+      - STORAGE_DIR=${STORAGE_DIR:-/data}
+      - BASE_URL=${BASE_URL:-http://localhost:3000}
+    volumes:
+      - app-data:${STORAGE_DIR:-/data}
+    restart: unless-stopped
+
+volumes:
+  app-data:
