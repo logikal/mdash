@@ -1,0 +1,33 @@
+{
+  "cli_version": "0.5.2",
+  "checkpoint_id": "3fc2f5a61e6d",
+  "session_id": "2c6b395b-f4a2-49a5-a231-817ba06ebcb8",
+  "strategy": "manual-commit",
+  "created_at": "2026-04-02T19:15:15.312389198Z",
+  "branch": "fix/editor-layout-and-selection",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "client/src/editor/Editor.tsx"
+  ],
+  "agent": "Claude Code",
+  "turn_id": "38e642e259c9",
+  "token_usage": {
+    "input_tokens": 614,
+    "cache_creation_tokens": 390546,
+    "cache_read_tokens": 36621970,
+    "output_tokens": 65418,
+    "api_call_count": 302
+  },
+  "session_metrics": {
+    "turn_count": 20
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-04-02T19:15:14.908175686Z",
+    "agent_lines": 0,
+    "human_added": 18,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 18,
+    "agent_percentage": 0
+  }
+}
