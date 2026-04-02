@@ -1,0 +1,25 @@
+{
+  "cli_version": "0.5.2",
+  "checkpoint_id": "6ccfdf2f725b",
+  "strategy": "manual-commit",
+  "branch": "chore/major-dep-upgrades",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "package.json"
+  ],
+  "sessions": [
+    {
+      "metadata": "/6c/cfdf2f725b/0/metadata.json",
+      "transcript": "/6c/cfdf2f725b/0/full.jsonl",
+      "content_hash": "/6c/cfdf2f725b/0/content_hash.txt",
+      "prompt": "/6c/cfdf2f725b/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 396,
+    "cache_creation_tokens": 303214,
+    "cache_read_tokens": 8397483,
+    "output_tokens": 34947,
+    "api_call_count": 124
+  }
+}
