@@ -47,11 +47,18 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run test:coverage
-      - name: Post coverage comment
+      - name: Post server coverage comment
         if: github.event_name == 'pull_request'
         uses: davelosert/vitest-coverage-report-action@v2
         with:
-          json-summary-path: coverage/coverage-summary.json
+          working-directory: server
+          name: Server
+      - name: Post shared coverage comment
+        if: github.event_name == 'pull_request'
+        uses: davelosert/vitest-coverage-report-action@v2
+        with:
+          working-directory: shared
+          name: Shared
 
   smoke-tests:
     name: Smoke Tests
