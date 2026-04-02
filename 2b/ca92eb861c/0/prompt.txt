@@ -54,3 +54,19 @@ There’s a nom format check failure. Let’s add a pre-commit hook to run the f
 
 smoke and build tests failed in CI.
 don't add a pre-commit hook for this, but _you_ should run these checks so that we iterate faster
+
+---
+
+Are you able to see the "security and quality" issues via `gh`?
+
+---
+
+aka "code scanning alerts", not issues
+
+---
+
+No, I'm having step-security do it
+
+---
+
+we need to change all internal references of the name to 'mdash'
