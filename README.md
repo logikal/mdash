@@ -20,16 +20,16 @@ Client runs on `:5173`, server on `:3000`.
 
 ### Scripts
 
-| Command | What it does |
-|---|---|
-| `npm run dev` | Start client + server in watch mode |
-| `npm run build` | Build everything |
-| `npm run lint` | ESLint |
-| `npm run format` | Prettier (write) |
-| `npm run typecheck` | TypeScript check |
-| `npm test` | Unit tests |
-| `npm run test:smoke` | Smoke tests (needs running server) |
-| `npm run test:coverage` | Unit tests with coverage |
+| Command                 | What it does                        |
+| ----------------------- | ----------------------------------- |
+| `npm run dev`           | Start client + server in watch mode |
+| `npm run build`         | Build everything                    |
+| `npm run lint`          | ESLint                              |
+| `npm run format`        | Prettier (write)                    |
+| `npm run typecheck`     | TypeScript check                    |
+| `npm test`              | Unit tests                          |
+| `npm run test:smoke`    | Smoke tests (needs running server)  |
+| `npm run test:coverage` | Unit tests with coverage            |
 
 ## Self-hosting
 
@@ -49,11 +49,11 @@ volumes:
 
 ### Environment variables
 
-| Variable | Default | Description |
-|---|---|---|
-| `PORT` | `3000` | Server port |
-| `STORAGE_DIR` | `/data` | Document storage path |
-| `BASE_URL` | `http://localhost:3000` | Public URL for document links |
+| Variable      | Default                 | Description                   |
+| ------------- | ----------------------- | ----------------------------- |
+| `PORT`        | `3000`                  | Server port                   |
+| `STORAGE_DIR` | `/data`                 | Document storage path         |
+| `BASE_URL`    | `http://localhost:3000` | Public URL for document links |
 
 ### Stopping
 

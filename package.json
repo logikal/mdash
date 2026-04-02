@@ -18,7 +18,8 @@
     "test:coverage": "npm run test:coverage -w server && npm run test:coverage -w shared",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "prepare": "git config core.hooksPath .githooks"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
