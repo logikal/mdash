@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import { EditorState } from "@codemirror/state";
 import {
   EditorView,
@@ -29,6 +29,10 @@ import {
 } from "@codemirror/autocomplete";
 import { searchKeymap, highlightSelectionMatches } from "@codemirror/search";
 import { editorTheme, markdownHighlighting } from "./theme";
+import { criticmarkDecorations } from "./criticmark-decorations";
+import ModeToolbar from "./ModeToolbar";
+import type { EditorMode } from "./modes";
+import { setAwarenessMode } from "./modes";
 
 import * as Y from "yjs";
 import { WebsocketProvider } from "y-websocket";
@@ -56,7 +60,7 @@ function ConnectionIndicator({ status }: { status: ConnectionStatus }) {
   const { color, label } = config[status];
 
   return (
-    <div className="absolute top-2 right-3 flex items-center gap-1.5 text-xs text-gray-400 select-none z-10">
+    <div className="flex items-center gap-1.5 text-xs text-gray-400 select-none">
       <span className={`inline-block w-2 h-2 rounded-full ${color}`} />
       {label}
     </div>
@@ -66,10 +70,23 @@ function ConnectionIndicator({ status }: { status: ConnectionStatus }) {
 export default function Editor({ initialContent = "", docId }: EditorProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const viewRef = useRef<EditorView | null>(null);
+  const providerRef = useRef<WebsocketProvider | null>(null);
   const [connectionStatus, setConnectionStatus] =
     useState<ConnectionStatus>("connecting");
+  const [mode, setMode] = useState<EditorMode>("edit");
 
   const collaborative = Boolean(docId);
+
+  // Sync mode changes to Yjs awareness
+  const handleModeChange = useCallback(
+    (newMode: EditorMode) => {
+      setMode(newMode);
+      if (providerRef.current) {
+        setAwarenessMode(providerRef.current.awareness, newMode);
+      }
+    },
+    [],
+  );
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -92,6 +109,7 @@ export default function Editor({ initialContent = "", docId }: EditorProps) {
       editorTheme,
       markdownHighlighting,
       syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
+      criticmarkDecorations,
     ];
 
     let ydoc: Y.Doc | undefined;
@@ -112,6 +130,10 @@ export default function Editor({ initialContent = "", docId }: EditorProps) {
           params: { doc: docId },
         }
       );
+      providerRef.current = provider;
+
+      // Set initial mode in awareness
+      setAwarenessMode(provider.awareness, mode);
 
       provider.on("status", ({ status }: { status: string }) => {
         if (status === "connected") {
@@ -186,6 +208,7 @@ export default function Editor({ initialContent = "", docId }: EditorProps) {
         provider.disconnect();
         provider.destroy();
       }
+      providerRef.current = null;
 
       if (ydoc) {
         ydoc.destroy();
@@ -194,9 +217,15 @@ export default function Editor({ initialContent = "", docId }: EditorProps) {
   }, [docId]);
 
   return (
-    <div className="relative flex-1 min-h-0 overflow-hidden">
-      {collaborative && <ConnectionIndicator status={connectionStatus} />}
-      <div ref={containerRef} className="h-full overflow-hidden" />
+    <div className="relative flex-1 min-h-0 flex flex-col overflow-hidden">
+      {/* Editor toolbar */}
+      <div className="flex items-center justify-between px-4 py-1.5 border-b border-gray-800 bg-gray-950">
+        <ModeToolbar mode={mode} onModeChange={handleModeChange} />
+        {collaborative && <ConnectionIndicator status={connectionStatus} />}
+      </div>
+
+      {/* Editor area */}
+      <div ref={containerRef} className="flex-1 min-h-0 overflow-hidden" />
     </div>
   );
 }

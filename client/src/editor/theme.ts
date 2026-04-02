@@ -82,6 +82,50 @@ export const editorTheme = EditorView.theme(
       fontWeight: "600",
       color: "#9ca3af",
     },
+
+    // CriticMark decoration styles
+    ".cm-criticmark-addition": {
+      backgroundColor: "rgba(34, 197, 94, 0.15)", // green-500/15
+      color: "#86efac", // green-300
+      borderRadius: "2px",
+      padding: "0 1px",
+    },
+    ".cm-criticmark-deletion": {
+      backgroundColor: "rgba(239, 68, 68, 0.15)", // red-500/15
+      color: "#fca5a5", // red-300
+      textDecoration: "line-through",
+      borderRadius: "2px",
+      padding: "0 1px",
+    },
+    ".cm-criticmark-substitution-old": {
+      backgroundColor: "rgba(239, 68, 68, 0.15)",
+      color: "#fca5a5",
+      textDecoration: "line-through",
+      borderRadius: "2px",
+      padding: "0 1px",
+    },
+    ".cm-criticmark-substitution-new": {
+      backgroundColor: "rgba(34, 197, 94, 0.15)",
+      color: "#86efac",
+      borderRadius: "2px",
+      padding: "0 1px",
+    },
+    ".cm-criticmark-comment": {
+      backgroundColor: "rgba(234, 179, 8, 0.15)", // yellow-500/15
+      color: "#fde68a", // yellow-200
+      borderRadius: "2px",
+      padding: "0 1px",
+    },
+    ".cm-criticmark-highlight": {
+      backgroundColor: "rgba(168, 85, 247, 0.15)", // purple-500/15
+      color: "#d8b4fe", // purple-300
+      borderRadius: "2px",
+      padding: "0 1px",
+    },
+    ".cm-criticmark-delim": {
+      color: "#4b5563", // gray-600 - dim the delimiters
+      fontSize: "0.85em",
+    },
   },
   { dark: true },
 );
