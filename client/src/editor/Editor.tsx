@@ -9,36 +9,12 @@ import { closeBrackets, closeBracketsKeymap } from "@codemirror/autocomplete";
 import { searchKeymap, highlightSelectionMatches } from "@codemirror/search";
 import { editorTheme, markdownHighlighting } from "./theme";
 
-const SAMPLE_CONTENT = `# Welcome to Multiplayer Markdown
-
-A real-time collaborative markdown editor. Start typing to edit.
-
-## Features
-
-- **Real-time collaboration** with multiple cursors
-- *Inline markdown rendering* as you type
-- Support for \`code blocks\` and more
-
-### Code Example
-
-\`\`\`js
-function hello() {
-  console.log("Hello, markdown!");
+interface EditorProps {
+  initialContent?: string;
+  docId?: string;
 }
-\`\`\`
 
-> Blockquotes render with subtle styling
-
----
-
-This is a [link example](https://example.com) and some ~~strikethrough~~ text.
-
-1. Ordered lists
-2. Work too
-3. Just like this
-`;
-
-export default function Editor() {
+export default function Editor({ initialContent = "", docId }: EditorProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const viewRef = useRef<EditorView | null>(null);
 
@@ -46,7 +22,7 @@ export default function Editor() {
     if (!containerRef.current) return;
 
     const state = EditorState.create({
-      doc: SAMPLE_CONTENT,
+      doc: initialContent,
       extensions: [
         // Core editing
         lineNumbers(),
