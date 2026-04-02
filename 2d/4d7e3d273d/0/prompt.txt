@@ -1,0 +1,37 @@
+sorry, we were interrupted. continue
+
+---
+
+Node 24 is current LTS. We do want to update to that, in a way that dependabot doesn't keep pushing 25 on us.
+the dupes are still dependencies that need to be updated though? since this is a monorepo, each holds its own dependencies; they're not really dupes?
+Tackle the majors on a branch like you said
+
+---
+
+update dependabot to also upgrade github actions
+
+---
+
+I'm not sure where you pushed that. #12 was already merged
+
+---
+
+I have main branch protection enabled. you'll have to PR it
+
+---
+
+there are 5 new PRs for updates. address them. 
+
+When committing, I am the primary committer, add a co-author for claude-code
+
+---
+
+use --admin
+
+---
+
+#22 has failed CI. did you run the checks locally first?
+
+---
+
+docker build and smoke tests failing now
