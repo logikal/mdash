@@ -4,6 +4,7 @@ import { Hono } from "hono";
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { Storage } from "./storage.js";
+import { YjsServer } from "./yjs-server.js";
 
 const app = new Hono();
 
@@ -59,14 +60,22 @@ if (existsSync(clientDistPath)) {
   });
 }
 
+// Yjs WebSocket server for real-time collaboration
+const yjsServer = new YjsServer(storage);
+
 console.log(`Server starting on port ${PORT}`);
 console.log(`Storage directory: ${STORAGE_DIR}`);
 console.log(`Base URL: ${BASE_URL}`);
 
-serve({
+const server = serve({
   fetch: app.fetch,
   hostname: "0.0.0.0",
   port: PORT,
 });
 
-export { storage };
+// Handle WebSocket upgrade requests for Yjs collaboration
+server.on("upgrade", (req, socket, head) => {
+  yjsServer.handleUpgrade(req, socket, head);
+});
+
+export { storage, yjsServer };
