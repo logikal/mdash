@@ -54,6 +54,18 @@ app.post("/new", async (c) => {
   return c.redirect(`/${slug}`, 303);
 });
 
+// CLI upload via curl -T file.md (PUT /new)
+app.put("/new", async (c) => {
+  const owner = "anonymous";
+  const content = await c.req.text();
+  const slug = storage.create(owner, content);
+  const docUrl = `${BASE_URL}/${slug}`;
+
+  return c.text(docUrl + "\n", 201, {
+    Location: docUrl,
+  });
+});
+
 // Serve built client assets in production
 const clientDistPath = path.resolve(import.meta.dirname ?? ".", "../../client/dist");
 const indexHtmlPath = path.join(clientDistPath, "index.html");

@@ -196,6 +196,68 @@ describe("Smoke tests — API", () => {
     });
   });
 
+  describe("PUT /new — curl CLI upload", () => {
+    it("PUT /new creates a document and returns its URL", async () => {
+      const markdown = "# Uploaded via curl\n\nSome CLI content.";
+      const res = await fetch(`${BASE_URL}/new`, {
+        method: "PUT",
+        body: markdown,
+        redirect: "manual",
+      });
+      expect(res.status).toBe(201);
+
+      // Response body should contain the document URL
+      const body = await res.text();
+      expect(body.trim()).toMatch(/^http.+\/[0-9a-f]{8}$/);
+
+      // Location header should be set
+      const location = res.headers.get("location");
+      expect(location).toBeTruthy();
+      expect(location).toMatch(/\/[0-9a-f]{8}$/);
+
+      // Body URL and Location header should match
+      expect(body.trim()).toBe(location);
+    });
+
+    it("PUT /new document is readable via API with correct content", async () => {
+      const markdown = "# CLI Doc\n\nContent from PUT upload.";
+      const res = await fetch(`${BASE_URL}/new`, {
+        method: "PUT",
+        body: markdown,
+        redirect: "manual",
+      });
+      const location = res.headers.get("location")!;
+      const slug = location.split("/").pop()!;
+
+      // Fetch via API and verify content
+      const docRes = await fetch(`${BASE_URL}/api/docs/${slug}`);
+      expect(docRes.status).toBe(200);
+      const doc = (await docRes.json()) as {
+        slug: string;
+        content: string;
+        meta: { owner: string; created: string };
+      };
+      expect(doc.content).toBe(markdown);
+      expect(doc.meta.owner).toBe("anonymous");
+    });
+
+    it("PUT /new with empty body creates an empty document", async () => {
+      const res = await fetch(`${BASE_URL}/new`, {
+        method: "PUT",
+        body: "",
+        redirect: "manual",
+      });
+      expect(res.status).toBe(201);
+
+      const location = res.headers.get("location")!;
+      const slug = location.split("/").pop()!;
+
+      const docRes = await fetch(`${BASE_URL}/api/docs/${slug}`);
+      const doc = (await docRes.json()) as { content: string };
+      expect(doc.content).toBe("");
+    });
+  });
+
   describe("document list page support", () => {
     it("GET /api/docs returns all fields needed by document list page", async () => {
       // Create a document with a title heading
