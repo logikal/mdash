@@ -1,0 +1,7 @@
+sorry, we were interrupted. continue
+
+---
+
+Node 24 is current LTS. We do want to update to that, in a way that dependabot doesn't keep pushing 25 on us.
+the dupes are still dependencies that need to be updated though? since this is a monorepo, each holds its own dependencies; they're not really dupes?
+Tackle the majors on a branch like you said
