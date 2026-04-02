@@ -8,6 +8,7 @@ import {
   highlightActiveLineGutter,
   drawSelection,
   rectangularSelection,
+  type ViewUpdate,
 } from "@codemirror/view";
 import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
 import { languages } from "@codemirror/language-data";
@@ -33,8 +34,15 @@ import { criticmarkDecorations } from "./criticmark-decorations";
 import { suggestMode, setSuggestModeEffect } from "./suggest-mode";
 import { suggestionActions } from "./suggestion-actions";
 import { viewMode, viewModeEffect } from "./view-mode";
+import {
+  commentExtension,
+  commentPopoverField,
+  type CommentPopoverState,
+} from "./comment-extension";
 import ModeToolbar from "./ModeToolbar";
 import SuggestionToolbar from "./SuggestionToolbar";
+import CommentButton from "./CommentButton";
+import CommentPopover from "./CommentPopover";
 import type { EditorMode } from "./modes";
 import { setAwarenessMode } from "./modes";
 import UsernamePrompt from "./UsernamePrompt";
@@ -100,6 +108,12 @@ export default function Editor({ initialContent = "", docId }: EditorProps) {
     () => !getStoredUsername(),
   );
   const [remoteUsers, setRemoteUsers] = useState<RemoteUser[]>([]);
+  const [commentPopover, setCommentPopover] = useState<CommentPopoverState>({
+    open: false,
+    comment: null,
+    coords: null,
+  });
+  const editorWrapperRef = useRef<HTMLDivElement>(null);
 
   const collaborative = Boolean(docId);
 
@@ -169,6 +183,23 @@ export default function Editor({ initialContent = "", docId }: EditorProps) {
       suggestionActions,
       suggestMode(),
       viewMode(),
+      commentExtension(),
+      // Sync comment popover state from CM6 to React
+      EditorView.updateListener.of((update: ViewUpdate) => {
+        const popState = update.state.field(commentPopoverField, false);
+        if (popState) {
+          setCommentPopover((prev) => {
+            // Only update if something changed
+            if (
+              prev.open !== popState.open ||
+              prev.comment?.start !== popState.comment?.start
+            ) {
+              return popState;
+            }
+            return prev;
+          });
+        }
+      }),
     ];
 
     let ydoc: Y.Doc | undefined;
@@ -331,6 +362,7 @@ export default function Editor({ initialContent = "", docId }: EditorProps) {
         <div className="flex items-center gap-3">
           <ModeToolbar mode={mode} onModeChange={handleModeChange} />
           <SuggestionToolbar viewRef={viewRef} />
+          <CommentButton viewRef={viewRef} />
         </div>
         <div className="flex items-center gap-3">
           {collaborative && username && (
@@ -344,8 +376,16 @@ export default function Editor({ initialContent = "", docId }: EditorProps) {
         </div>
       </div>
 
-      {/* Editor area */}
-      <div ref={containerRef} className="flex-1 min-h-0 overflow-hidden" />
+      {/* Editor area with comment popover */}
+      <div ref={editorWrapperRef} className="relative flex-1 min-h-0 overflow-hidden">
+        <div ref={containerRef} className="h-full overflow-hidden" />
+        <CommentPopover
+          state={commentPopover}
+          viewRef={viewRef}
+          username={username || "anonymous"}
+          editorContainerRef={editorWrapperRef}
+        />
+      </div>
     </div>
   );
 }
