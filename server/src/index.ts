@@ -65,6 +65,7 @@ console.log(`Base URL: ${BASE_URL}`);
 
 serve({
   fetch: app.fetch,
+  hostname: "0.0.0.0",
   port: PORT,
 });
 
