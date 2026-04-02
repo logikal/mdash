@@ -13,3 +13,7 @@ update dependabot to also upgrade github actions
 ---
 
 I'm not sure where you pushed that. #12 was already merged
+
+---
+
+I have main branch protection enabled. you'll have to PR it
