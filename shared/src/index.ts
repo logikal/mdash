@@ -1,6 +1,8 @@
 // Shared types and utilities between client and server
 export const APP_NAME = "Multiplayer Markdown";
 
+export * from "./criticmark.js";
+
 /** Sidecar metadata stored alongside each .md file */
 export interface DocumentMeta {
   owner: string;
