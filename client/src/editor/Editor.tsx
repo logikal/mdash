@@ -154,6 +154,7 @@ export default function Editor({ initialContent = "", docId }: EditorProps) {
       bracketMatching(),
       closeBrackets(),
       highlightSelectionMatches(),
+      EditorView.lineWrapping,
       markdown({
         base: markdownLanguage,
         codeLanguages: languages,

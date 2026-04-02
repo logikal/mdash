@@ -21,8 +21,6 @@ export const editorTheme = EditorView.theme(
     ".cm-content": {
       caretColor: "#60a5fa", // blue-400
       padding: "1rem 0",
-      maxWidth: "72ch",
-      margin: "0 auto",
       lineHeight: "1.7",
     },
     ".cm-cursor, .cm-dropCursor": {
@@ -33,7 +31,7 @@ export const editorTheme = EditorView.theme(
       backgroundColor: "#1e3a5f",
     },
     ".cm-activeLine": {
-      backgroundColor: "#0d1117",
+      backgroundColor: "#0d111766",
     },
     ".cm-gutters": {
       backgroundColor: "#030712",
