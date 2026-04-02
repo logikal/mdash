@@ -127,6 +127,51 @@ export const editorTheme = EditorView.theme(
       fontSize: "0.85em",
     },
 
+    // Suggestion accept/reject action buttons
+    ".cm-suggestion-actions": {
+      display: "inline-flex",
+      alignItems: "center",
+      gap: "1px",
+      marginLeft: "2px",
+      verticalAlign: "middle",
+      opacity: "0.6",
+      transition: "opacity 0.15s ease",
+    },
+    ".cm-suggestion-actions:hover": {
+      opacity: "1",
+    },
+    ".cm-suggestion-accept, .cm-suggestion-reject": {
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center",
+      width: "18px",
+      height: "18px",
+      border: "none",
+      borderRadius: "3px",
+      cursor: "pointer",
+      fontSize: "12px",
+      lineHeight: "1",
+      padding: "0",
+      fontWeight: "bold",
+      transition: "background-color 0.15s ease, color 0.15s ease",
+    },
+    ".cm-suggestion-accept": {
+      backgroundColor: "rgba(34, 197, 94, 0.2)",
+      color: "#86efac",
+    },
+    ".cm-suggestion-accept:hover": {
+      backgroundColor: "rgba(34, 197, 94, 0.4)",
+      color: "#bbf7d0",
+    },
+    ".cm-suggestion-reject": {
+      backgroundColor: "rgba(239, 68, 68, 0.2)",
+      color: "#fca5a5",
+    },
+    ".cm-suggestion-reject:hover": {
+      backgroundColor: "rgba(239, 68, 68, 0.4)",
+      color: "#fecaca",
+    },
+
     // Remote cursor styles (y-codemirror.next overrides for dark theme)
     ".cm-ySelectionCaret": {
       position: "relative",

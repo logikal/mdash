@@ -31,8 +31,10 @@ import { searchKeymap, highlightSelectionMatches } from "@codemirror/search";
 import { editorTheme, markdownHighlighting } from "./theme";
 import { criticmarkDecorations } from "./criticmark-decorations";
 import { suggestMode, setSuggestModeEffect } from "./suggest-mode";
+import { suggestionActions } from "./suggestion-actions";
 import { viewMode, viewModeEffect } from "./view-mode";
 import ModeToolbar from "./ModeToolbar";
+import SuggestionToolbar from "./SuggestionToolbar";
 import type { EditorMode } from "./modes";
 import { setAwarenessMode } from "./modes";
 import UsernamePrompt from "./UsernamePrompt";
@@ -164,6 +166,7 @@ export default function Editor({ initialContent = "", docId }: EditorProps) {
       markdownHighlighting,
       syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
       criticmarkDecorations,
+      suggestionActions,
       suggestMode(),
       viewMode(),
     ];
@@ -325,7 +328,10 @@ export default function Editor({ initialContent = "", docId }: EditorProps) {
 
       {/* Editor toolbar */}
       <div className="flex items-center justify-between px-4 py-1.5 border-b border-gray-800 bg-gray-950">
-        <ModeToolbar mode={mode} onModeChange={handleModeChange} />
+        <div className="flex items-center gap-3">
+          <ModeToolbar mode={mode} onModeChange={handleModeChange} />
+          <SuggestionToolbar viewRef={viewRef} />
+        </div>
         <div className="flex items-center gap-3">
           {collaborative && username && (
             <UserPresence
