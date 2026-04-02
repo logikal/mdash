@@ -1,0 +1,27 @@
+{
+  "cli_version": "0.5.2",
+  "checkpoint_id": "2bca92eb861c",
+  "strategy": "manual-commit",
+  "branch": "chore/rename-to-mdash",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "client/src/pages/DocumentPage.tsx",
+    "server/package.json",
+    "shared/package.json"
+  ],
+  "sessions": [
+    {
+      "metadata": "/2b/ca92eb861c/0/metadata.json",
+      "transcript": "/2b/ca92eb861c/0/full.jsonl",
+      "content_hash": "/2b/ca92eb861c/0/content_hash.txt",
+      "prompt": "/2b/ca92eb861c/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 570,
+    "cache_creation_tokens": 369569,
+    "cache_read_tokens": 29722155,
+    "output_tokens": 58485,
+    "api_call_count": 266
+  }
+}
