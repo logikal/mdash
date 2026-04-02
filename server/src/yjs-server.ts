@@ -46,7 +46,7 @@ export class YjsServer {
   handleUpgrade(req: IncomingMessage, socket: any, head: Buffer): void {
     // Only handle upgrades to /ws
     const url = new URL(req.url ?? "/", `http://${req.headers.host}`);
-    if (url.pathname !== "/ws") {
+    if (!url.pathname.startsWith("/ws")) {
       socket.destroy();
       return;
     }
