@@ -1,8 +1,8 @@
 /**
  * Mode toolbar: Edit / Suggest / View toggle.
  *
- * Displayed in the editor chrome. Suggest and View are shown but disabled
- * until their respective issues are implemented.
+ * Displayed in the editor chrome. View mode is shown but disabled
+ * until its respective issue is implemented.
  */
 
 import type { EditorMode } from "./modes";
@@ -20,8 +20,8 @@ export default function ModeToolbar({ mode, onModeChange }: ModeToolbarProps) {
     <div className="flex items-center gap-0.5 bg-gray-900 rounded-md p-0.5 border border-gray-800">
       {MODE_ORDER.map((m) => {
         const isActive = m === mode;
-        // Suggest and View are not yet implemented - show but disable
-        const isDisabled = m === "suggest" || m === "view";
+        // View mode is not yet implemented - show but disable
+        const isDisabled = m === "view";
 
         return (
           <button

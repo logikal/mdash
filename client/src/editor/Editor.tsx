@@ -30,6 +30,7 @@ import {
 import { searchKeymap, highlightSelectionMatches } from "@codemirror/search";
 import { editorTheme, markdownHighlighting } from "./theme";
 import { criticmarkDecorations } from "./criticmark-decorations";
+import { suggestMode, setSuggestModeEffect } from "./suggest-mode";
 import ModeToolbar from "./ModeToolbar";
 import type { EditorMode } from "./modes";
 import { setAwarenessMode } from "./modes";
@@ -108,16 +109,28 @@ export default function Editor({ initialContent = "", docId }: EditorProps) {
       if (providerRef.current) {
         setAwarenessUser(providerRef.current.awareness, name);
       }
+      // Update the CM6 suggest-mode field with the new username
+      if (viewRef.current) {
+        viewRef.current.dispatch({
+          effects: setSuggestModeEffect.of({ username: name }),
+        });
+      }
     },
     [],
   );
 
-  // Sync mode changes to Yjs awareness
+  // Sync mode changes to Yjs awareness + CM6 suggest-mode state
   const handleModeChange = useCallback(
     (newMode: EditorMode) => {
       setMode(newMode);
       if (providerRef.current) {
         setAwarenessMode(providerRef.current.awareness, newMode);
+      }
+      // Update the CM6 suggest-mode field
+      if (viewRef.current) {
+        viewRef.current.dispatch({
+          effects: setSuggestModeEffect.of({ mode: newMode }),
+        });
       }
     },
     [],
@@ -147,6 +160,7 @@ export default function Editor({ initialContent = "", docId }: EditorProps) {
       markdownHighlighting,
       syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
       criticmarkDecorations,
+      suggestMode(),
     ];
 
     let ydoc: Y.Doc | undefined;
@@ -233,6 +247,11 @@ export default function Editor({ initialContent = "", docId }: EditorProps) {
       });
 
       viewRef.current = view;
+
+      // Set initial suggest-mode state (mode + username)
+      view.dispatch({
+        effects: setSuggestModeEffect.of({ mode, username }),
+      });
     } else {
       // -- Local-only fallback (no docId) --
       setConnectionStatus("disconnected");
@@ -258,6 +277,11 @@ export default function Editor({ initialContent = "", docId }: EditorProps) {
       });
 
       viewRef.current = view;
+
+      // Set initial suggest-mode state (mode + username)
+      view.dispatch({
+        effects: setSuggestModeEffect.of({ mode, username }),
+      });
     }
 
     return () => {
