@@ -4,7 +4,7 @@ FROM node:24-slim@sha256:06e5c9f86bfa0aaa7163cf37a5eaa8805f16b9acb48e3f85645b09d
 WORKDIR /app
 
 # Copy workspace root manifests first for better layer caching
-COPY package.json package-lock.json ./
+COPY package.json package-lock.json .npmrc ./
 COPY client/package.json client/
 COPY server/package.json server/
 COPY shared/package.json shared/
@@ -26,7 +26,7 @@ FROM node:24-slim@sha256:06e5c9f86bfa0aaa7163cf37a5eaa8805f16b9acb48e3f85645b09d
 WORKDIR /app
 
 # Copy workspace root manifests
-COPY package.json package-lock.json ./
+COPY package.json package-lock.json .npmrc ./
 COPY client/package.json client/
 COPY server/package.json server/
 COPY shared/package.json shared/

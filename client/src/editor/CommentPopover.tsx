@@ -43,14 +43,22 @@ export default function CommentPopover({
   username,
   editorContainerRef,
 }: CommentPopoverProps) {
-  const [replyText, setReplyText] = useState("");
+  // Reset reply text when a different comment opens by using the comment start
+  // position as a key for the state. This avoids calling setState in an effect.
+  const commentKey = state.open ? (state.comment?.start ?? 0) : -1;
+  const [replyState, setReplyState] = useState({ key: commentKey, text: "" });
+  if (replyState.key !== commentKey) {
+    setReplyState({ key: commentKey, text: "" });
+  }
+  const replyText = replyState.text;
+  const setReplyText = (text: string) => setReplyState({ key: commentKey, text });
+
   const inputRef = useRef<HTMLInputElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
 
   // Focus input when popover opens
   useEffect(() => {
     if (state.open) {
-      setReplyText("");
       // Small delay to allow render
       setTimeout(() => inputRef.current?.focus(), 50);
     }
@@ -82,7 +90,7 @@ export default function CommentPopover({
   const handleSubmit = useCallback(() => {
     if (!replyText.trim() || !viewRef.current || !state.comment) return;
     appendCommentEntry(viewRef.current, state.comment, username, replyText.trim());
-    setReplyText("");
+    setReplyState((prev) => ({ ...prev, text: "" }));
   }, [replyText, viewRef, state.comment, username]);
 
   const handleResolve = useCallback(() => {
@@ -94,7 +102,10 @@ export default function CommentPopover({
 
   const { comment, coords } = state;
 
-  // Position relative to the editor container
+  // Compute position relative to the editor container.
+  // Safe to read the ref here: this code only runs when the popover is visible,
+  // and the container ref is stable (it doesn't drive re-renders).
+  // eslint-disable-next-line react-hooks/refs
   const containerRect = editorContainerRef.current?.getBoundingClientRect();
   const left = containerRect ? coords.x - containerRect.left : coords.x;
   const top = containerRect ? coords.y - containerRect.top : coords.y;
