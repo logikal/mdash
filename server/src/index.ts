@@ -1,8 +1,9 @@
 import { serve } from "@hono/node-server";
 import { serveStatic } from "@hono/node-server/serve-static";
 import { Hono } from "hono";
-import { existsSync, mkdirSync } from "node:fs";
+import { existsSync } from "node:fs";
 import path from "node:path";
+import { Storage } from "./storage.js";
 
 const app = new Hono();
 
@@ -10,16 +11,23 @@ const PORT = parseInt(process.env.PORT ?? "3000", 10);
 const STORAGE_DIR = process.env.STORAGE_DIR ?? "./storage";
 const BASE_URL = process.env.BASE_URL ?? `http://localhost:${PORT}`;
 
-// Ensure storage directory exists
-if (!existsSync(STORAGE_DIR)) {
-  mkdirSync(STORAGE_DIR, { recursive: true });
-}
+// Initialize storage (ensures directory exists)
+const storage = new Storage(STORAGE_DIR);
 
 // Health check
 app.get("/health", (c) => c.json({ status: "ok" }));
 
-// API routes (placeholder)
-app.get("/api/docs", (c) => c.json({ docs: [] }));
+// API routes
+app.get("/api/docs", (c) => {
+  const docs = storage.list();
+  return c.json({ docs });
+});
+
+app.get("/api/docs/:docId", (c) => {
+  const doc = storage.read(c.req.param("docId"));
+  if (!doc) return c.json({ error: "Document not found" }, 404);
+  return c.json(doc);
+});
 
 // Serve built client assets in production
 const clientDistPath = path.resolve(import.meta.dirname ?? ".", "../../client/dist");
@@ -35,3 +43,5 @@ serve({
   fetch: app.fetch,
   port: PORT,
 });
+
+export { storage };
